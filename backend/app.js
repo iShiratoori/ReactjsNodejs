@@ -16,7 +16,8 @@ const ExpressError = require('./utils/expressError');
 const cors = require('cors');
 
 const server = express()
-const dbUrl = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/dentalClinic';
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/dentalClinic';
+const PORT = process.env.PORT || '3001';
 mongoose.connect(dbUrl);
 const db = mongoose.connection;
 
@@ -93,7 +94,7 @@ server.use((err, req, res, next) => {
     res.status(statusCode).json({ statusCode, title, text })
 });
 
-server.listen(3001, err => {
+server.listen(PORT, err => {
     if (err) throw err;
-    console.log('server is running on port 3000')
+    console.log(`App is running on port ${PORT}`)
 })
