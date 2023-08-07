@@ -1,14 +1,11 @@
 if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
-
 const express = require('express')
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const bodyParser = require('body-parser')
-const session = require('express-session');
 const mongoose = require('mongoose');
-const MongoStore = require('connect-mongo');
 const User = require('./models/users');
 const userRoute = require('./routes/userRouter');
 const apiRoute = require('./routes/api');
@@ -30,25 +27,8 @@ server.use(bodyParser.json())
 server.use(bodyParser.urlencoded({ extended: true }));
 
 
-const store = new MongoStore({
-    mongoUrl: dbUrl,
-    touchAfter: 24 * 60 * 60
-});
-store.on("error", function (e) {
-    console.log("SESSION STORE ERROR: ", e)
-})
-const sessionConfig = {
-    store,
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        httpOnly: true,
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-        maxAge: 1000 * 60 * 60 * 24 * 7
-    }
-}
-const allowedOrigins = ['http://localhost:3000'];
+
+const allowedOrigins = ['http://localhost:3000', 'https://dental-clinic-plum.vercel.app'];
 
 server.use(
     cors({
@@ -63,10 +43,6 @@ server.use(
     })
 );
 
-server.use(session(sessionConfig))
-
-server.use(passport.initialize());
-server.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
