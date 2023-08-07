@@ -1,0 +1,247 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-100 dark:bg-black overflow-x-hidden m-0 ;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.stepper-wrapper {
+  @apply flex justify-between mt-auto;
+}
+.stepper-item {
+  @apply relative flex items-center flex-1;
+  flex-direction: column;
+
+}
+
+.stepper-item::before {
+  position: absolute;
+  content: "";
+  border-bottom: 2px solid #ccc;
+  width: 100%;
+  top: 20px;
+  left: -50%;
+  z-index: 2;
+}
+
+.stepper-item::after {
+  position: absolute;
+  content: "";
+  border-bottom: 2px solid #ccc;
+  width: 100%;
+  top: 20px;
+  left: 50%;
+  z-index: 2;
+}
+
+.stepper-item .step-counter {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ccc;
+  margin-bottom: 6px;
+}
+
+.stepper-item.active .step-counter{
+  border: 2px solid #4bb543;
+  font-weight: bold;
+}
+
+.stepper-item.completed .step-counter {
+  background-color: #4bb543;
+}
+
+.stepper-item.completed::after {
+  position: absolute;
+  content: "";
+  border-bottom: 2px solid #4bb543;
+  width: 100%;
+  top: 20px;
+  left: 50%;
+  z-index: 3;
+}
+
+.stepper-item:first-child::before {
+  content: none;
+}
+.stepper-item:last-child::after {
+  content: none;
+}
+
+.tooltip {
+  @apply relative inline-block cursor-pointer;
+  position: relative;
+}
+
+.tooltip .tooltiptext {
+  @apply  bg-black text-white dark:bg-white dark:text-black rounded-lg text-center absolute w-[120px] z-10 left-[50%] bottom-[125%] opacity-0 p-2 transition-opacity translate-x-[-50%];
+}
+
+.tooltip:hover .tooltiptext {
+  @apply visible opacity-100
+}
+
+.sidebar .side-menu>li>a.active,
+.sidebar .side-menu>li>a.active:hover {
+  @apply bg-[#0C5FCD] text-white
+}
+
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black opacity-50 z-40;
+}
+.model-dialog{
+  @apply fixed left-0 right-0 z-50 items-center justify-center overflow-x-hidden overflow-y-auto top-4 md:inset-0  sm:h-full flex;
+}
+/* NAVBAR */
+nav {
+  @apply   bg-white dark:bg-gray-900 dark:text-white dark:border-gray-700 h-16 px-6 sticky z-10;
+  grid-gap: 28px;
+
+}
+
+nav .divider {
+  @apply block w-1 h-4 dark:bg-gray-800;
+}
+nav .nav-link {
+  @apply relative text-black dark:text-white 
+};
+
+nav .nav-link .badge {
+  @apply flex justify-center items-center absolute w-5 h-5 text-[10px] font-bold bg-red-400 text-black rounded-full border-black dark:border-white;
+  top: -5px;
+  right: -2px;
+}
+
+nav .profile {
+   @apply relative;
+}
+nav .profile img {
+  @apply w-9 h-9 rounded-full cursor-pointer object-cover;
+}
+nav .profile .profile-link {
+  @apply  absolute right-0 opacity-0 rounded-lg w-[160px] pointer-events-none transition-all ease-in-out duration-300 shadow-2xl bg-white dark:bg-gray-900 dark:border-gray-300 dark:text-gray-500;
+}
+nav .profile .profile-link.show {
+  @apply opacity-100 pointer-events-auto;
+}
+nav .profile .profile-link a {
+  @apply flex items-center text-[14px] py-3 px-4 text-black dark:text-gray-500 transition-all ease-in-out duration-300;
+  grid-gap: 10px;
+}
+nav .profile .profile-link a:hover {
+  @apply bg-[#0C5FCD] text-white;
+}
+nav .profile .profile-link .btn-outline-danger{
+  @apply flex items-center text-[14px] py-3 px-4 w-full text-red-600 hover:bg-red-600 hover:text-white ;
+}
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar {
+  @apply fixed max-w-[260px] w-full bg-white dark:bg-gray-800 dark:border-gray-700  top-0 left-0 h-full overflow-y-auto transition-all ease-in-out duration-300 z-20;
+}
+
+.sidebar.hide {
+  @apply max-w-[60px] hover:max-w-[260px];
+}
+
+.sidebar .brand {
+  @apply flex items-center text-blue-500 dark:bg-gray-800 sticky text-[24px] font-bold top-0 left-0 z-10 px-2 transition-all ease-in-out duration-300 h-[64px];
+}
+
+.sidebar .icon {
+  @apply flex justify-center items-center mr-[6px] min-w-[48px] ;
+}
+
+.sidebar .side-menu {
+  @apply my-10 px-6 transition-all ease-in-out duration-300 ;
+}
+
+.sidebar.hide .side-menu { 
+   @apply px-2 hover:px-6;
+}
+
+.sidebar .side-menu a {
+  @apply flex items-center dark:text-gray-500 py-3 pe-4 transition-all ease-in-out duration-300 rounded-md my-2 whitespace-nowrap;
+}
+
+.sidebar .side-menu>li>a:hover {
+  @apply bg-[#0C5FCD] text-white;
+}
+
+.sidebar .divider {
+  margin-top: 24px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--sidebar-divider);
+  transition: all .3s ease;
+  white-space: nowrap;
+}
+
+.sidebar.hide:hover .divider {
+  text-align: left;
+}
+
+.sidebar.hide .divider {
+  text-align: center;
+}
+
+.sidebar .logout {
+  @apply w-full p-6
+}
+
+.sidebar.hide .logout {
+  @apply hidden;
+}
+
+.sidebar.hide:hover .logout {
+  @apply block;
+}
+
+@media (min-height: 784px) {
+  .sidebar .logout .logout-wrapper {
+      margin-top: 17rem;
+  }
+}
+
+.sidebar .btn-logout {
+  @apply flex justify-center items-center text-[14px] py-3 transition-all ease-in-out duration-300 font-semibold rounded-md mb-3 bg-red-500 hover:bg-red-600;
+}
+
+.sidebar .logout .wrapper p {
+  @apply text-[14px] text-gray-400 text-center;
+}
+
+.sidebar .logout .wrapper p span {
+  @apply font-bold;
+}
+
+/* CONTENT */
+#content {
+  @apply relative left-[260px] transition-all ease-in-out duration-300;
+  width: calc(100% - 260px);
+}
+
+.sidebar.hide+#content {
+  @apply left-16;
+  width: calc(100% - 60px);
+}
