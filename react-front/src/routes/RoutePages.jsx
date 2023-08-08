@@ -7,6 +7,8 @@ import Appointments from "../components/Admin/Appointments";
 import NewPatient from "../components/utils/NewPatient";
 import Setting from "../components/Admin/Setting";
 import NewDentist from "../components/utils/NewDentist";
+import GuestOverview from "../components/Guest/Overview";
+import Profile from "../components/Admin/Profile";
 
 export const AdminRoute = (
     <>
@@ -25,6 +27,7 @@ export const AdminRoute = (
         <Route path='payments' element={<h1>All payments</h1>} />
         <Route path='reports' element={<h1>All reports</h1>} />
         <Route path='setting' element={<Setting />} />
+        <Route path='profile' element={<Profile />} />
     </>
 )
 
@@ -44,6 +47,6 @@ export const PatientRoute = (
 )
 export const GuestRoute = (
     <>
-        <Route path='' element={<h1>Guest Overview page</h1>} />
+        <Route path='' element={<GuestOverview />} />
     </>
 )

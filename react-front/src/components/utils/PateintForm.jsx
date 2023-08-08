@@ -1,13 +1,28 @@
+import { useState } from 'react';
 import useInput from '../hooks/useInput'
+import { uploadFileToServer } from '../../server/server';
+import { getDateFormattedForEditing } from '../helpers';
 
 const PatientForm = ({ patient, submitToServer }) => {
     const [name, handleNameChange] = useInput(patient.name);
     const [address, handleAddressChange] = useInput(patient.address[0]);
-    // const [contacts, handleContactsChange] = useInput(patient.contacts);
+    const [image, setImage] = useState(null);
+    const [dob, handleDOBChange] = useInput(getDateFormattedForEditing(patient.dob));
+    const [contacts, handleContactsChange] = useInput(patient.contacts);
+    const [gender, handleGenderChange] = useState(patient.gender);
 
+    const handleFileChange = async (e) => {
+        const formData = new FormData();
+        formData.append('file', e.target.files[0]);
+        const data = await uploadFileToServer('upload', 'POST', formData)
+        setImage({
+            public_id: data.filename,
+            url: data.path,
+        })
+    };
     const handleSubmit = async (e) => {
         e.preventDefault()
-        submitToServer({ name, address })
+        submitToServer({ _id: patient._id, name, address, image, gender, contacts })
     }
     return (
         <form onSubmit={handleSubmit}>
@@ -56,7 +71,68 @@ const PatientForm = ({ patient, submitToServer }) => {
                             className="peer-focus:font-medium absolute  text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                         >Last name</label>
                     </div>
+                    <div className="relative z-0 w-full mb-6 group">
+                        <input
+                            type="text"
+                            name="gender"
+                            id="gender"
+                            value={gender}
+                            onChange={(e) => handleGenderChange(e.target.value)}
+                            className="block py-2.5 px-0 w-full font-semibold text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                            required />
+                        <label
+                            htmlFor="gender"
+                            className="peer-focus:font-medium absolute  text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                        >Gender</label>
+                    </div>
+                    <div className="relative z-0 w-full mb-6 group">
+                        <input
+                            type="date"
+                            name="dob"
+                            id="dob"
+                            value={dob}
+                            onChange={handleDOBChange}
+                            className="block py-2.5 px-0 w-full font-semibold text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                            required />
+                        <label
+                            htmlFor="title"
+                            className="peer-focus:font-medium absolute  text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                        >DOB</label>
+                    </div>
+                    <div className="relative z-0 w-full mb-6 group">
+                        <input
+                            type="number"
+                            name="number"
+                            id="number"
+                            value={contacts.phone}
+                            onChange={handleContactsChange}
+                            className="block py-2.5 px-0 w-full font-semibold text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                            required />
+                        <label
+                            htmlFor="number"
+                            className="peer-focus:font-medium absolute  text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                        >Phone</label>
+                    </div>
+                    <div className="relative z-0 w-full mb-6 group">
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            value={contacts.email}
+                            onChange={handleContactsChange}
+                            className="block py-2.5 px-0 w-full font-semibold text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                            required />
+                        <label
+                            htmlFor="email"
+                            className="peer-focus:font-medium absolute  text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                        >Email</label>
+                    </div>
                 </div>
+
                 <div className="grid md:grid-cols-2 md:gap-6">
                     <div className="relative z-0 w-full mb-6 group">
                         <input
@@ -116,6 +192,20 @@ const PatientForm = ({ patient, submitToServer }) => {
                             htmlFor="country"
                             className="peer-focus:font-medium absolute  text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                         >Country</label>
+                    </div>
+                    <div className="relative z-0 w-full mb-6 group">
+                        <input
+                            type="file"
+                            name="profileImage"
+                            id="profileImage"
+                            onChange={handleFileChange}
+                            className="block py-2.5 px-0 w-full font-semibold text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=""
+                            required />
+                        <label
+                            htmlFor="profileImage"
+                            className="peer-focus:font-medium absolute  text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                        >Profile Image</label>
                     </div>
                 </div>
             </div>

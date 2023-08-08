@@ -70,26 +70,25 @@ const register = catchAsync(async (req, res, next) => {
 const update = catchAsync(async (req, res, next) => {
     const { patient } = req.body;
     const updatePatient = await Patient.findById(patient._id)
-    console.log(patient)
-    // if (!patient) {
-    //     const msg = ({
-    //         title: 'Not Found Patient',
-    //         text: `Sorry we cant the patient you are looking/try to updating please maku patient id ${patientId} exit you database`
-    //     })
-    //     throw next(new ExpressError(msg, 404));
-    // }
+    if (!updatePatient) {
+        const msg = ({
+            title: 'Not Found Patient',
+            text: `Sorry we cant the patient you are looking/try to updating please maku patient id ${patient._id} exit you database`
+        })
+        throw next(new ExpressError(msg, 404));
+    }
 
-    // const whereTo = cloudinary.pathTo.patient(patient._id).profile
-    // if (req.file) {
-    //     const result = await cloudinary.updateFolder(req.file.path, whereTo)
-    //     req.body.patient.image = ({
-    //         public_id: result.public_id,
-    //         url: result.url
-    //     })
-
-    //     // console.log(req.file.filename)
-    //     await cloudinary.deleteFile(req.file.filename)
-    // } else {
+    const whereTo = cloudinary.pathTo.patient(updatePatient._id).profile
+    if (patient.image) {
+        const temporaryPath = patient.image.public_id
+        const result = await cloudinary.updateFolder(patient.image.url, whereTo)
+        patient.image = ({
+            public_id: result.public_id,
+            url: result.url
+        })
+        await cloudinary.deleteFile(temporaryPath)
+    }
+    // else {
     //     if (req.body.patient.image) {
     //         const { url } = req.body.patient.image
     //         const result = await cloudinary.updateFolder(url, whereTo)
@@ -99,7 +98,7 @@ const update = catchAsync(async (req, res, next) => {
     //         })
     //     }
     // }
-    // await Patient.findByIdAndUpdate(patientId, req.body.patient)
+    await Patient.findByIdAndUpdate(patient._id, patient)
     res.status(200).json({ message: 'updated successfully patient' })
 })
 

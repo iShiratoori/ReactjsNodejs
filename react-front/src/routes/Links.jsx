@@ -9,11 +9,11 @@ export const AdminSidebarLinks = (
                 Overview
             </NavLink>
         </li>
-        <li>
+        <li className="mt-20">
             <NavLink
                 className={({ isActive }) => isActive ? "active" : ""}
                 to="/dashboard/admin/dentists">
-                <i className="fa-solid fa-user-doctor icon"></i>
+                <i className="bi bi-person-fill icon"></i>
                 Dentists
             </NavLink>
         </li>
@@ -55,6 +55,19 @@ export const AdminSidebarLinks = (
                 to="/dashboard/admin/reports">
                 <i className='text-danger  bi bi-flag icon'></i>
                 Report
+            </NavLink>
+        </li>
+    </ul>
+)
+
+export const GuestSidebarLinks = (
+    <ul className="side-menu">
+        <li>
+            <NavLink
+                className={({ isActive }) => isActive ? "active" : ""}
+                to="/dashboard/guest/" >
+                <i className="bi bi-grid icon"></i>
+                Overview
             </NavLink>
         </li>
     </ul>

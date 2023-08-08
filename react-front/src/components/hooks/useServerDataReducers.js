@@ -34,7 +34,7 @@ function useServerDataReducers(API, role, reducer) {
     }, [hasError])
 
     useEffect(() => {
-        dispatch({ type: 'update', data: data })
+        dispatch({ type: 'NEW', data: data })
     }, [data]);
 
     return [state, dispatch];

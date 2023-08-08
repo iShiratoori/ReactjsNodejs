@@ -10,9 +10,8 @@ const router = express.Router();
 
 router.use(catchAsync(async (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
-    let decoteToken = '';
     try {
-        decoteToken = jwt.verify(token, process.env.TOKEN_SECRET);
+        let decoteToken = jwt.verify(token, process.env.TOKEN_SECRET);
     } catch (error) {
         const message = {
             title: 'Session expired',
@@ -20,7 +19,7 @@ router.use(catchAsync(async (req, res, next) => {
         };
         throw next(new ExpressError(message, 401))
     }
-    const isFoundToken = await Token.findOne({ token: decoteToken.token })
+    const isFoundToken = await Token.findOne({ token: token })
     if (!isFoundToken) {
         const message = {
             title: 'Please Login First',
@@ -46,7 +45,7 @@ router.route('/')
 router.route('/patients')
     // .get(all patients)
     .post(validatePatient, admin.patient.register)
-    .put(admin.patient.update)
+    .put(validatePatient, admin.patient.update)
     .delete(admin.patient.deleteP)
 
 //dentsits

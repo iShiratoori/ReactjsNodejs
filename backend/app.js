@@ -15,6 +15,8 @@ const apiRoute = require('./routes/api');
 const ExpressError = require('./utils/expressError');
 const cors = require('cors');
 
+const { uploadImageCloudTemporary } = require('./utils/middleware');
+
 const server = express()
 const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/dentalClinic';
 const PORT = process.env.PORT || '3001';
@@ -82,6 +84,14 @@ server.use("/guest", (req, res, next) => {
     res.status(200).json({ message: 'success' })
 })
 
+server.post("/upload", uploadImageCloudTemporary('dentalClinic/temporary'), (req, res) => {
+    const file = req.file;
+    if (file) {
+        res.json(file);
+    } else {
+        throw new Error("File upload unsuccessful");
+    }
+});
 server.all('*', (req, res, next) => {
     const message = {
         title: 'Page not Found',

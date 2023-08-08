@@ -6,14 +6,14 @@ import ProtectedRoutes from './ProtectedRoutes';
 import AuthRequired from './AuthRequired'
 import Layouts from "../components/layouts/Layouts";
 import { AdminRoute, DentistRoute, GuestRoute, PatientRoute } from "./RoutePages";
-import { AdminSidebarLinks } from "./Links";
+import { AdminSidebarLinks, GuestSidebarLinks } from "./Links";
 import { ServerDataProvider } from "../components/context/data.context";
 import ErrorBoundary from '../components/ErrorBoundary';
 import ServerError from "../components/Error/ServerError";
 import Error from "../components/Error/Error";
 import { DispatchErrorContext } from '../components/context/error.context';
 import Register from "../components/Register";
-const RoutePages = ({ setTheme }) => {
+const RoutePages = () => {
     const { dispatchError } = useContext(DispatchErrorContext)
     return (
         <Routes>
@@ -31,7 +31,7 @@ const RoutePages = ({ setTheme }) => {
                         path='admin'
                         element={
                             <ProtectedRoutes requiredRole='admin'>
-                                <Layouts sidebarLinks={AdminSidebarLinks} setTheme={setTheme}>
+                                <Layouts sidebarLinks={AdminSidebarLinks}>
                                     <ErrorBoundary
                                         fallback={<ServerError />}
                                         dispatchError={dispatchError}>
@@ -71,7 +71,7 @@ const RoutePages = ({ setTheme }) => {
                     <Route path='guest'
                         element={
                             <ProtectedRoutes requiredRole='guest'>
-                                <Layouts sidebarLinks='guest'>
+                                <Layouts sidebarLinks={GuestSidebarLinks} >
                                     <Outlet />
                                 </Layouts>
                             </ProtectedRoutes>

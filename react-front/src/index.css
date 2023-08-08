@@ -125,7 +125,7 @@ nav .nav-link {
 
 nav .nav-link .badge {
   @apply flex justify-center items-center absolute w-5 h-5 text-[10px] font-bold bg-red-400 text-black rounded-full border-black dark:border-white;
-  top: -5px;
+  top: -10px;
   right: -2px;
 }
 
@@ -187,7 +187,8 @@ nav .profile .profile-link .btn-outline-danger{
   @apply bg-[#0C5FCD] text-white;
 }
 
-.sidebar .divider {
+.sidebar .side-menu  .divider {
+  @apply bg-red-400;
   margin-top: 24px;
   font-size: 12px;
   text-transform: uppercase;
@@ -206,7 +207,7 @@ nav .profile .profile-link .btn-outline-danger{
 }
 
 .sidebar .logout {
-  @apply w-full p-6
+  @apply w-full p-6 flex items-start
 }
 
 .sidebar.hide .logout {
@@ -217,11 +218,12 @@ nav .profile .profile-link .btn-outline-danger{
   @apply block;
 }
 
-@media (min-height: 784px) {
+
+/* @media (min-height: 784px) {
   .sidebar .logout .logout-wrapper {
       margin-top: 17rem;
   }
-}
+} */
 
 .sidebar .btn-logout {
   @apply flex justify-center items-center text-[14px] py-3 transition-all ease-in-out duration-300 font-semibold rounded-md mb-3 bg-red-500 hover:bg-red-600;

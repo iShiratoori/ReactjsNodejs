@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import axios from 'axios'
 
 export async function LoginUser(userData, path) {
     const { username, password } = userData
@@ -66,4 +67,26 @@ export async function performAPIRequest(path, method, requestData = null) {
 
     const data = await response.json();
     return data;
+}
+
+export async function uploadFileToServer(path, method, requestData = null) {
+    const sessionToken = Cookies.get('session-token');
+    const headers = {
+        'Authorization': `Bearer ${sessionToken}`,
+    };
+    const config = {
+        method,
+        url: `${process.env.REACT_APP_API_URL}/${path}`,
+        headers,
+        data: requestData, // Include data if provided
+    };
+
+    try {
+        const response = await axios(config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+
+
 }

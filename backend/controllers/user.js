@@ -20,16 +20,14 @@ const isAuthorized = (req, res) => {
 }
 
 const login = catchAsync(async (req, res) => {
-    const payload = { role: req.user.getDirectory };
+    const payload = { user: req.user, role: req.user.getDirectory };
     const gentoken = generateToken(payload);
     const token = new Token({ user: req.user, token: gentoken, role: req.user.getDirectory })
     await token.save()
 
-    const session = {
-        role: req.user.getDirectory,
+    const user = {
         token: token.token
     }
-    const user = generateToken(session);
     res.status(200).json({ user });
 })
 

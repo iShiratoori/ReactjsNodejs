@@ -25,6 +25,7 @@ const Joi = BaseJoi.extend(extension)
 
 module.exports.patientSchema = Joi.object({
     patient: Joi.object({
+        _id: Joi.string().escapeHTML(),
         name: Joi.object({
             title: Joi.string().required().escapeHTML(),
             firstName: Joi.string().required().escapeHTML(),
@@ -47,6 +48,7 @@ module.exports.patientSchema = Joi.object({
             addressL2: Joi.string().allow('').optional().escapeHTML(),
             postCode: Joi.string().required().escapeHTML(),
             country: Joi.string().required().escapeHTML(),
+            _id: Joi.string().escapeHTML(),
         }).required()
     }).required(),
 });

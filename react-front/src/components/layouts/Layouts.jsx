@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import Sidebar from '../utils/Sidebar'
 import Navbar from '../utils/Navbar'
-import { ModelContextProvider } from "../context/model.dialog.contex"
 
 const DashboardLayouts = ({ children, sidebarLinks }) => {
     const [showSidebar, setShowSidebar] = useState(true)
     return (
-        <ModelContextProvider>
+        <>
             <Sidebar
                 showSidebar={showSidebar}
                 sidebarLinks={sidebarLinks}
@@ -27,7 +26,7 @@ const DashboardLayouts = ({ children, sidebarLinks }) => {
                     </main>
                 </div>
             </section>
-        </ModelContextProvider>
+        </>
     )
 }
 

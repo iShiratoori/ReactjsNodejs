@@ -8,20 +8,22 @@ import SessionProvider from './components/context/session.context';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from './components/context/theme.context';
 import { LoadingContextProvider } from './components/context/loading.context';
-
+import { ModelContextProvider } from "./components/context/model.dialog.contex"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <LoadingContextProvider>
       <ErrorContextProdiver>
-        <SessionProvider>
-          <ThemeProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </ThemeProvider>
-        </SessionProvider>
+        <ModelContextProvider>
+          <SessionProvider>
+            <ThemeProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </ThemeProvider>
+          </SessionProvider>
+        </ModelContextProvider>
       </ErrorContextProdiver>
     </LoadingContextProvider>
   </React.StrictMode>

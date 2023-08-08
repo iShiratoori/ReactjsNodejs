@@ -8,6 +8,7 @@ cloudinary.config({
 })
 
 const createfolder = (storagePath) => {
+    console.log(storagePath)
     return new CloudinaryStorage({
         cloudinary,
         params: {

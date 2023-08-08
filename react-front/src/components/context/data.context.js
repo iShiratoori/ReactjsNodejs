@@ -1,14 +1,9 @@
-import { createContext, useContext } from 'react';
+import { createContext } from 'react';
 import { serverDataReducer } from '../reducers/serverData.reducers';
 import useServerDataReducers from '../hooks/useServerDataReducers'
 import { SearchProvider } from './search.context';
 export const ServerDataContext = createContext()
 export const ServerDataDispatchContext = createContext()
-
-export function useServerData() {
-    const { serverData } = useContext(ServerDataContext);
-    return serverData;
-}
 
 export const ServerDataProvider = ({ children, role }) => {
     const [serverData, setServerData] = useServerDataReducers('[]', role, serverDataReducer);

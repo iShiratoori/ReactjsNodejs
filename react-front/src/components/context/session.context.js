@@ -34,8 +34,8 @@ const SessionProvider = ({ children }) => {
     const login = async (userData) => {
         try {
             const res = await LoginUser(userData, 'api/auth');
-            Cookies.set('session-token', res.user);
-            VerifyFunc(res.user)
+            Cookies.set('session-token', res.user.token);
+            VerifyFunc(res.user.token)
             return true
         } catch (error) {
             console.log(error)
