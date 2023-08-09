@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useSession } from '../components/context/session.context';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { useSession } from '../components/context/session.context';
+import { LoadingContext, LoadingDispatchContext } from '../components/context/loading.context';
+import Loading from '../components/utils/Loading'
 const Login = () => {
     const { session, login } = useSession();
     const navigate = useNavigate();
@@ -9,15 +10,18 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [error, setError] = useState(null);
     // const [isLogged, setIsLogged] = useState(null);
-
+    const { isLoadingState } = useContext(LoadingContext)
+    const { setIsLoadingState } = useContext(LoadingDispatchContext)
     useEffect(() => {
         if (session) {
             return navigate(`/dashboard/${session.role}/`);
         }
-    }, [session, navigate])
+        //eslint-disable-next-line
+    }, [session])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoadingState({ isLoading: true, type: '', text: '' })
         setError(null)
         try {
             const userData = { username, password }
@@ -25,6 +29,7 @@ const Login = () => {
             if (res) {
                 // setIsLogged('You are logged successfully')
             }
+            setIsLoadingState({ isLoading: false, type: '', text: '' })
         } catch (err) {
             setError(err.message)
         }
@@ -107,10 +112,15 @@ const Login = () => {
                                     className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
                                     Forgot password?</Link>
                             </div>
-                            <button
-                                type="submit"
-                                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                Sign in</button>
+                            {isLoadingState.isLoading
+                                ? <Loading /> :
+                                (
+                                    <button
+                                        type="submit"
+                                        className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                        Sign in</button>
+                                )
+                            }
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                 Don’t have an account yet? <Link to="/register" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</Link>
                             </p>

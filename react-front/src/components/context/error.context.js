@@ -8,7 +8,6 @@ export const ErrorContextProdiver = ({ children }) => {
     const dispatchError = (error) => {
         setHasError(error);
     };
-
     return (
         <ErrorContext.Provider value={{ hasError }}>
             <DispatchErrorContext.Provider value={{ dispatchError }}>

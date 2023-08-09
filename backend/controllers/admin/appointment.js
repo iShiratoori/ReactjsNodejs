@@ -7,7 +7,7 @@ const catchAsync = require('../../utils/catchAsync');
 //index
 const all = catchAsync(async (req, res, next) => {
     const appointments = await Appointment.find({}).populate('patient').populate('dentist')
-    res.status(200).json({ message: 'Appointmetn Index' })
+    res.status(200).json({ appointments })
 });
 
 //create appointment
@@ -78,7 +78,7 @@ const deleteAppointment = catchAsync(async (req, res, next) => {
         app.dentist._id,
         { $pull: { appointments: { $in: app._id } } }
     );
-    res.status(200).json({ message: 'Deleting Appointment' })
+    next()
 })
 
 

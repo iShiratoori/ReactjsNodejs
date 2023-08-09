@@ -46,18 +46,18 @@ router.route('/patients')
     // .get(all patients)
     .post(validatePatient, admin.patient.register)
     .put(validatePatient, admin.patient.update)
-    .delete(admin.patient.deleteP)
+    .delete(admin.patient.deleteP, admin.patient.all)
 
 //dentsits
 router.route('/dentists')
     .post(admin.dentist.register)
     .put(admin.dentist.update)
-    .delete(admin.dentist.deleteD)
+    .delete(admin.dentist.deleteD, admin.dentist.all)
 
 
 router.route('/appointments')
     .get(admin.appointment.all) //index
     .post(admin.appointment.create) //new
     .put(admin.appointment.update) //update
-    .delete(admin.appointment.deleteAppointment) //delete
+    .delete(admin.appointment.deleteAppointment, admin.appointment.all) //delete
 module.exports = router

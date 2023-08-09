@@ -10,6 +10,7 @@ const Profile = () => {
                     <div className='text-center'>
                         <img src={session.user.image.url}
                             className='w-36 h-36 rounded-full'
+                            alt='profile'
                         />
                         <span>@{session.user.username}</span>
                     </div>

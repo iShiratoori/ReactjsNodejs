@@ -4,6 +4,7 @@ import Navbar from '../utils/Navbar'
 
 const DashboardLayouts = ({ children, sidebarLinks }) => {
     const [showSidebar, setShowSidebar] = useState(true)
+
     return (
         <>
             <Sidebar

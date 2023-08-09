@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const Admin = () => {
+    useEffect(() => {
+        document.title = 'Overview';
+    }, [])
     return (
         <div>
             <h1>Admin page</h1>

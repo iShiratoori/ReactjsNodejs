@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { cloudinary } = require('../cloudinary')
 const passportLocalMongoose = require('passport-local-mongoose');
 const rolePermissions = {
     'Admin': ['read', 'create', 'update', 'delete'],
@@ -11,10 +12,19 @@ const rolePermissions = {
 const AccountSchema = new Schema({
     email: {
         type: String,
-        required: [true, 'Email is required'],
-        unique: [true, 'Email already existed']
+        required: true,
+        unique: true
     },
-
+    image: {
+        public_id: {
+            type: String,
+            required: [true, 'image public id failed to get'],
+        },
+        url: {
+            type: String,
+            required: [true, 'failed to get image url'],
+        },
+    },
     linkageData: {
         type: Schema.Types.ObjectId,
         refPath: 'linkageModel',
@@ -64,6 +74,7 @@ const AccountSchema = new Schema({
 
                             } else {
                                 return true; //!permissions.includes('create') && !permissions.includes('write') && !permissions.includes('delete');
+                                // Other roles have no specific permissions
                             }
                         },
                         message: 'Invalid permissions for the specified role.',
@@ -81,11 +92,7 @@ const AccountSchema = new Schema({
 });
 
 AccountSchema.plugin(passportLocalMongoose);
-AccountSchema.methods.updatePassword = async function (newPassword) {
-    await this.setPassword(newPassword)
-    //revoke alltokens here
-    return this.save()
-};
+
 AccountSchema.methods.doesCodeExist = function () {
     return Boolean(this.verification?.code);
 };
@@ -97,7 +104,6 @@ AccountSchema.methods.isCodeExpired = function () {
 AccountSchema.methods.isVerified = function () {
     return Boolean(this.verification?.verified);
 };
-
 
 AccountSchema.virtual('isAdmin').get(function () {
     const found = this.hasPermission.some(permission => permission.role === 'Admin');
@@ -193,7 +199,12 @@ AccountSchema.methods.removeRole = function (role) {
 
 AccountSchema.pre('save', async function () {
     if (!this.hasPermission.length) {
-        this.assignRoleToUser = "Guest"
+        const existingUsers = await mongoose.models.User.find({});
+        if (existingUsers.length === 0) {
+            this.assignRoleToUser = "Admin";
+        } else {
+            this.assignRoleToUser = "Guest"
+        }
     }
     this.definePermissions()
 })

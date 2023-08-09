@@ -1,12 +1,11 @@
-import { useContext } from "react"
-import { ServerDataContext } from "../context/data.context"
+import { useContext, useEffect } from "react"
+import { useServerData, useServerDispatch } from "../context/data.context"
 import { DispatchModelContext, ModelContext } from "../context/model.dialog.contex"
 import AppointmentList from "../utils/AppointmentList"
 import Model from "../utils/Model"
 import AppointmentForm from "../utils/AppointmentForm"
 import { DeleteFormModel, EditFormModel } from "../utils/Crude"
 import { performAPIRequest } from "../../server/server"
-import { ServerDataDispatchContext } from "../context/data.context"
 
 const NewAppointment = () => {
     const submitForm = (data) => {
@@ -22,7 +21,7 @@ const NewAppointment = () => {
 }
 
 const DeleteModel = () => {
-    const { setServerData } = useContext(ServerDataDispatchContext);
+    const { setServerData } = useServerDispatch();
     const { data } = useContext(ModelContext)
     const { closeModel } = useContext(DispatchModelContext)
     const deleteAppointment = async (e) => {
@@ -30,8 +29,7 @@ const DeleteModel = () => {
         const res = await performAPIRequest('api/admin/appointments', 'Delete', {
             appointmentId: data._id
         })
-        console.log(res)
-        setServerData({ type: 'REMOVE_APPOINTMENT', id: data._id })
+        setServerData({ type: 'APPOINTMENTS', data: res.appointments })
         closeModel()
     }
     return (
@@ -76,21 +74,32 @@ const ModelToOpen = (model) => {
 
 
 const Appointments = () => {
-    const { serverData } = useContext(ServerDataContext)
+    const { serverData } = useServerData()
     const { isOpen, model } = useContext(ModelContext);
-
+    useEffect(() => {
+        console.log(serverData)
+        document.title = 'All Appointments';
+        //eslint-disable-next-line
+    }, [])
     if (serverData) {
         const appointments = serverData.appointments
+        if (appointments.length) {
+            return (
+                <>
+                    {isOpen && <ModelToOpen model={model} />}
+                    <AppointmentList appointments={appointments} />
+                </>
+            )
+        }
         return (
-            <>
-                {isOpen && <ModelToOpen model={model} />}
-                <AppointmentList appointments={appointments} />
-            </>
+            <p className="mt-2 text-center text-red-600 dark:text-red-500">
+                <span className="font-medium">Sorry i can't find any Appointments </span>
+            </p>
         )
     }
     return (
         <div>
-            <h1>there is no appointments</h1>
+            <h1>there is no server</h1>
         </div>
     )
 }

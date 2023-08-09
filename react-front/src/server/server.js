@@ -37,6 +37,7 @@ export async function RegisterUser(userData, path) {
     })
     if (!res.ok) {
         const data = await res.json()
+        console.log(data)
         throw data
     }
     return res.json()
@@ -79,8 +80,13 @@ export async function uploadFileToServer(path, method, requestData = null) {
         url: `${process.env.REACT_APP_API_URL}/${path}`,
         headers,
         data: requestData, // Include data if provided
+        onUploadProgress: (progressEvent) => {
+            const percentage = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+            );
+            console.log(`Upload progress: ${percentage}%`);
+        },
     };
-
     try {
         const response = await axios(config);
         return response.data;

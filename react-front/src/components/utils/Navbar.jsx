@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { DispatchThemeContext } from '../context/theme.context'
 import { useSession } from '../context/session.context'
 const Navbar = () => {
-    const { logout } = useSession()
+    const { logout, session } = useSession()
     const [showProfileLinks, setShowProfileLinks] = useState(false)
     const { toggleTheme } = useContext(DispatchThemeContext)
     const dropdownRef = useRef(null);
@@ -49,7 +49,7 @@ const Navbar = () => {
                         </div>
                     </div>
                     <div className="profile" ref={dropdownRef} onClick={() => setShowProfileLinks((pevState) => !pevState)}>
-                        <img src="http://res.cloudinary.com/dm7zftkof/image/upload/v1687176779/dentalClinic/patients/6490464ab1d15ceccc5c4c3c/p8y61jr6ciwaom6nojuq.jpg" alt="profile" />
+                        <img src={session.user.image.url} alt="profile" />
                         <ul className={`profile-link ${showProfileLinks && 'show'}`}>
                             <li>
                                 <Link to="profile"><i className='bx bxs-user-circle icon'></i> Profile</Link>

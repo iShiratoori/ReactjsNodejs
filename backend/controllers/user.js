@@ -3,6 +3,7 @@ const Token = require('../models/token');
 const jwt = require('jsonwebtoken');
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/expressError');
+const { cloudinary } = require('../cloudinary');
 
 function generateToken(payload) {
     const secretKey = process.env.TOKEN_SECRET;
@@ -32,11 +33,38 @@ const login = catchAsync(async (req, res) => {
 })
 
 const create = catchAsync(async (req, res, next) => {
-    const { email, username, password } = req.body.user;
-    const user = new User({ email, username, });
-    // user.assignRoleToUser = "Admin"
-    // user.definePermissions()
+    const { email, username, password, image } = req.body.user;
+    const user = new User({ email, username });
+
+    const whereTo = cloudinary.pathTo.user.profile
+
+    let temporaryPath = null
+    if (image && image.public_id && image.url) {
+        temporaryPath = image.public_id
+        const result = await cloudinary.updateFolder(image.url, whereTo)
+        user.image = ({
+            public_id: result.public_id,
+            url: result.url
+        })
+    } else {
+        const defaultProfileImage = 'https://res.cloudinary.com/dm7zftkof/image/upload/v1686965695/dentalClinic/unknow-person_fj6car.jpg'
+        await cloudinary.updateFolder(defaultProfileImage, whereTo)
+            .then(async (result) => {
+                // console.log('File uploaded successfully to Cloudinary:', result);
+                user.image = ({
+                    public_id: result.public_id,
+                    url: result.url
+                })
+            })
+            .catch((error) => {
+                throw new Error('Error uploading file:', error);
+            });
+    }
+
     await User.register(user, password);
+    if (temporaryPath) {
+        await cloudinary.deleteFile(temporaryPath)
+    }
     res.status(200).json({ message: 'successfully created your account' });
 })
 

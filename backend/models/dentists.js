@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const Appointment = require('./appointments')
 const addressSchema = require('./address');
 const dateSchema = require('./utils/date');
+const { cloudinary } = require('../cloudinary')
 const { Schema } = mongoose
 const dentistSchema = new Schema({
     name: {

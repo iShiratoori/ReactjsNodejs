@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react"
-import { ModelContext } from "../context/model.dialog.contex"
+import { DispatchModelContext, ModelContext } from "../context/model.dialog.contex"
 import Model from '../utils/Model'
 import PateintForm from '../utils/PateintForm'
 import { DeleteFormModel, EditFormModel } from "../utils/Crude"
@@ -7,6 +7,7 @@ import { getFullName } from "../helpers"
 import { performAPIRequest } from "../../server/server"
 import PatientList from "../utils/PatientList"
 import { SearchContext } from "../context/search.context"
+import { useServerDispatch } from "../context/data.context"
 
 const EditPatient = ({ data }) => {
     const submitToServer = async (patient) => {
@@ -103,13 +104,17 @@ const LinkToUser = () => {
 
 
 const DeletePatient = () => {
+    const { setServerData } = useServerDispatch();
     const { data } = useContext(ModelContext)
+    const { closeModel } = useContext(DispatchModelContext)
     const handleDeletion = async (e) => {
         e.preventDefault();
         try {
-            await performAPIRequest('api/admin/patients', 'Delete', {
+            const res = await performAPIRequest('api/admin/patients', 'Delete', {
                 patientId: data._id
             })
+            setServerData({ type: 'PATIENTS', data: res.patients })
+            closeModel()
         } catch (error) {
             console.log(error)
         }
@@ -168,8 +173,9 @@ const ModelToOpen = (model) => {
 const Patients = () => {
     const { data, handleSearch } = useContext(SearchContext)
     const { isOpen, model } = useContext(ModelContext);
-
     useEffect(() => {
+        console.log(data)
+        document.title = 'All Patients';
         handleSearch('', 'patients')
         //eslint-disable-next-line
     }, [])

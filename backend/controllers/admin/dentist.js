@@ -4,7 +4,11 @@ const ExpressError = require('../../utils/expressError');
 const catchAsync = require('../../utils/catchAsync');
 const { cloudinary } = require('../../cloudinary');
 
-
+//index
+const all = catchAsync(async (req, res, next) => {
+    const dentists = await Dentist.find({});
+    res.status(200).json({ dentists })
+});
 const register = catchAsync(async (req, res, next) => {
     const { newDentist } = req.body;
     console.log(newDentist)
@@ -106,18 +110,27 @@ const update = catchAsync(async (req, res, next) => {
 // delete dentist
 const deleteD = catchAsync(async (req, res, next) => {
     const { dentistId } = req.body;
-    console.log(dentistId)
-    // const dentist = await Dentist.findByIdAndDelete(dentistId).populate('patients');
+    const findDentist = await Dentist.findById(dentistId)
+    if (!findDentist) {
+        const msg = {
+            title: 'Not Found Dentist',
+            text: 'Sorry we cant find that Dentist make your id was right'
+        }
+        throw next(new ExpressError(msg, 404));
+    }
 
-    // if (dentist.patients) {
-    //     for (const patient of dentist.patients) {
-    //         await Patient.findByIdAndUpdate(patient._id, { dentist: null });
-    //     }
-    // }
-    res.status(200).json({ message: 'delete successfully dentist' })
+    const dentist = await Dentist.findByIdAndDelete(dentistId).populate('patients');
+
+    if (dentist.patients) {
+        for (const patient of dentist.patients) {
+            await Patient.findByIdAndUpdate(patient._id, { dentist: null });
+        }
+    }
+    next()
 })
 
 module.exports.dentist = {
+    all,
     register,
     update,
     deleteD,

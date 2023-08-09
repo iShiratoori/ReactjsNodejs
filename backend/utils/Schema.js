@@ -113,7 +113,7 @@ module.exports.userSchema = Joi.object({
         password: Joi.string().required().escapeHTML(),
         image: Joi.object({
             public_id: Joi.string().allow('').optional().escapeHTML(),
-            url: Joi.string().required().escapeHTML(),
+            url: Joi.string().allow('').optional().escapeHTML(),
         }),
         linkageData: Joi.string().allow('').optional().escapeHTML(),
         role: Joi.string().allow('').optional().escapeHTML(),

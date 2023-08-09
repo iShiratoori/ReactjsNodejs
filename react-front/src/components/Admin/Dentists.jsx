@@ -1,12 +1,13 @@
 import { getFullName } from "../helpers"
 import { useContext, useEffect } from "react"
-import { ModelContext } from "../context/model.dialog.contex"
+import { DispatchModelContext, ModelContext } from "../context/model.dialog.contex"
 import DentistForm from "../utils/DentistForm"
 import Model from "../utils/Model"
 import { DeleteFormModel, EditFormModel } from "../utils/Crude"
 import { performAPIRequest } from "../../server/server"
 import DentistList from '../utils/DentistList'
 import { SearchContext } from "../context/search.context"
+import { useServerDispatch } from "../context/data.context"
 
 const EditDentist = ({ data }) => {
     return (
@@ -55,14 +56,17 @@ const LinkToUser = () => {
 }
 
 const DeleteDentist = () => {
+    const { setServerData } = useServerDispatch();
     const { data } = useContext(ModelContext)
+    const { closeModel } = useContext(DispatchModelContext)
     const handleDeletion = async (e) => {
         e.preventDefault();
         try {
             const res = await performAPIRequest('api/admin/dentists', 'Delete', {
                 dentistId: data._id
             })
-            console.log(res)
+            setServerData({ type: 'DENTISTS', data: res.dentists })
+            closeModel()
         } catch (error) {
             console.log(error)
         }
@@ -122,6 +126,7 @@ const Dentists = () => {
     const { isOpen, model } = useContext(ModelContext);
 
     useEffect(() => {
+        document.title = 'All Dentists';
         handleSearch('', 'dentists')
         //eslint-disable-next-line
     }, [])

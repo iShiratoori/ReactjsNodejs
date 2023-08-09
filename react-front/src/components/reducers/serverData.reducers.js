@@ -5,8 +5,12 @@ export function serverDataReducer(state, action) {
         case 'UPDATE':
             const newdata = action.data
             return { ...state, ...newdata }
-        case "REMOVE_APPOINTMENT":
-            return { ...state, appointments: state.appointments.filter(appointment => appointment._id !== action.id) }
+        case "DENTISTS":
+            return { ...state, dentists: action.data }
+        case "PATIENTS":
+            return { ...state, patients: action.data }
+        case "APPOINTMENTS":
+            return { ...state, appointments: action.data }
         case "EDIT":
             return state.map(todo =>
                 todo.id === action.id ? { ...todo, task: action.newTask } : todo

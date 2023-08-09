@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { ServerDataContext } from "../context/data.context"
 
 const UsersList = ({ users }) => {
@@ -61,6 +61,10 @@ const UsersList = ({ users }) => {
 
 const Users = () => {
     const { serverData } = useContext(ServerDataContext)
+    useEffect(() => {
+        document.title = 'All Users';
+        //eslint-disable-next-line
+    }, [])
     if (serverData) {
         const users = serverData.users
         return (

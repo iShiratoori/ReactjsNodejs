@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
+const Appointment = require('./appointments')
 const Dentist = require('./dentists')
 const dateSchema = require('./utils/date')
 const addressSchema = require('./address')
+const { cloudinary } = require('../cloudinary')
 const { Schema } = mongoose
 
 const patientSchema = new Schema({
@@ -68,7 +70,6 @@ const patientSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Dentist'
     },
-    search: String,
 
     createdAt: {
         type: Date,
@@ -122,9 +123,7 @@ patientSchema.virtual('isAssociated').get(function () {
     return true;
 })
 
-patientSchema.pre('save', async function () {
-    this.search = `${this.name.firstName} ${this.name.lastName}`
-})
+
 patientSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
         await cloudinary.deleteFile(doc.image.public_id)
