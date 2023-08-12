@@ -4,7 +4,7 @@ import { LoadingDispatchContext } from "../context/loading.context";
 import { DispatchErrorContext, ErrorContext } from '../context/error.context'
 
 function useServerDataReducers(role, reducer) {
-    const { setIsLoadingState } = useContext(LoadingDispatchContext)
+    const { setIsLoadingState, dispatchLoading } = useContext(LoadingDispatchContext)
     const { hasError } = useContext(ErrorContext)
     const { dispatchError } = useContext(DispatchErrorContext)
     const [data, setData] = useState(null);
@@ -19,9 +19,9 @@ function useServerDataReducers(role, reducer) {
             try {
                 const d = await performAPIRequest(`api/${role}`, 'GET');
                 setData(d);
-                setIsLoadingState({ isLoading: false, type: '', text: '' })
+                dispatchLoading()
             } catch (error) {
-                setIsLoadingState({ isLoading: false, type: '', text: '' })
+                dispatchLoading()
                 dispatchError(error)
             }
         }

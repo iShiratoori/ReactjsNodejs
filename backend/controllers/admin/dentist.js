@@ -120,7 +120,6 @@ const deleteD = catchAsync(async (req, res, next) => {
     }
 
     const dentist = await Dentist.findByIdAndDelete(dentistId).populate('patients');
-
     if (dentist.patients) {
         for (const patient of dentist.patients) {
             await Patient.findByIdAndUpdate(patient._id, { dentist: null });

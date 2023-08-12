@@ -9,7 +9,7 @@ const DentistList = ({ dentists }) => {
                 <DentistCard
                     id={dentist._id}
                     name={(getFullName(dentist.name))}
-                    dob={dentist.dob.date}
+                    dob={dentist.dob}
                     img={dentist.image.url}
                     key={dentist._id}
                     dentist={dentist} />

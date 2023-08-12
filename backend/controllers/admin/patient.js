@@ -17,58 +17,48 @@ const all = catchAsync(async (req, res, next) => {
 
 //register patient
 const register = catchAsync(async (req, res, next) => {
-    const newPatient = req.body.patient;
-    console.log(newPatient)
-    // const whereTo = cloudinary.pathTo.patient(newPatient._id).profile
-    // if (req.file) {
-    //     await cloudinary.updateFolder(req.file.path, whereTo)
-    //         .then((result) => {
-    //             if (result.created_at) {
-    //                 newPatient.image.public_id = result.public_id
-    //                 newPatient.image.url = result.url
-    //             } else {
-    //                 const msg = ({
-    //                     title: 'Error Uploading Image Cloudinary',
-    //                     text: 'While Uploading Patient image there is error accured'
-    //                 })
-    //                 throw next(new ExpressError(msg, 404));
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error uploading file:', error);
-    //         });
-    //     await cloudinary.deleteFile(req.file.filename)
-    // } else {
-    //     if (req.body.patient.image.url) {
-    //         const { url } = req.body.patient.image
-    //         await cloudinary.updateFolder(url, whereTo)
-    //             .then(async (result) => {
-    //                 // console.log('File uploaded successfully to Cloudinary:', result);
-    //                 newPatient.image = ({
-    //                     public_id: result.public_id,
-    //                     url: result.url
-    //                 })
-    //             })
-    //             .catch((error) => {
-    //                 console.error('Error uploading file:', error);
-    //             });
-    //     } else {
-    //         const unknow = 'https://res.cloudinary.com/dm7zftkof/image/upload/v1686965695/dentalClinic/unknow-person_fj6car.jpg'
-    //         await cloudinary.updateFolder(unknow, whereTo)
-    //             .then(async (result) => {
-    //                 // console.log('File uploaded successfully to Cloudinary:', result);
-    //                 newPatient.image = ({
-    //                     public_id: result.public_id,
-    //                     url: result.url
-    //                 })
-    //             })
-    //             .catch((error) => {
-    //                 console.error('Error uploading file:', error);
-    //             });
-    //     }
-    // }
+    const { patient } = req.body
+    const newPatient = new Patient(patient);
+    const whereTo = cloudinary.pathTo.patient(newPatient._id).profile
 
-    // await newPatient.save();
+    let temporaryPath = null
+    if (patient.image && patient.image.public_id && patient.image.url) {
+        temporaryPath = image.public_id
+        await cloudinary.updateFolder(patient.image.url, whereTo)
+            .then((result) => {
+                if (result.created_at) {
+                    newPatient.image.public_id = result.public_id
+                    newPatient.image.url = result.url
+                } else {
+                    const msg = ({
+                        title: 'Error Uploading Image Cloudinary',
+                        text: 'While Uploading Patient image there is error accured'
+                    })
+                    throw next(new ExpressError(msg, 404));
+                }
+            })
+            .catch((error) => {
+                console.error('Error uploading file:', error);
+            });
+    } else {
+        const unknow = 'https://res.cloudinary.com/dm7zftkof/image/upload/v1686965695/dentalClinic/unknow-person_fj6car.jpg'
+        await cloudinary.updateFolder(unknow, whereTo)
+            .then(async (result) => {
+                // console.log('File uploaded successfully to Cloudinary:', result);
+                newPatient.image = ({
+                    public_id: result.public_id,
+                    url: result.url
+                })
+            })
+            .catch((error) => {
+                console.error('Error uploading file:', error);
+            });
+    }
+
+    await newPatient.save();
+    if (temporaryPath) {
+        await cloudinary.deleteFile(temporaryPath)
+    }
     res.status(200).json({ message: 'New pateint successfully registered' })
 });
 

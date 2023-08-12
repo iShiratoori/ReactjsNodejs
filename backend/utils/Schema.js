@@ -31,9 +31,7 @@ module.exports.patientSchema = Joi.object({
             firstName: Joi.string().required().escapeHTML(),
             lastName: Joi.string().required().escapeHTML(),
         }).required(),
-        dob: Joi.object({
-            date: Joi.date().required()
-        }),
+        dob: Joi.date().required(),
         gender: Joi.string().required().escapeHTML(),
         image: Joi.object({
             public_id: Joi.string().allow('').optional().escapeHTML(),
@@ -60,9 +58,7 @@ module.exports.dentistSchema = Joi.object({
             firstName: Joi.string().required().escapeHTML(),
             lastName: Joi.string().required().escapeHTML(),
         }).required(),
-        dob: Joi.object({
-            date: Joi.date().required()
-        }),
+        dob: Joi.date().required(),
         gender: Joi.string().required().escapeHTML(),
         specialization: Joi.string().required().escapeHTML(),
         image: Joi.object({

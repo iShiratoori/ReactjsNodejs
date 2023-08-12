@@ -22,7 +22,7 @@ const patientSchema = new Schema({
         }
     },
     dob: {
-        type: dateSchema,
+        type: Date,
         required: true
     },
     gender: {

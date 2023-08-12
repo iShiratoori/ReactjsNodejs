@@ -62,7 +62,7 @@ const UsersList = ({ users }) => {
 const Users = () => {
     const { serverData } = useContext(ServerDataContext)
     useEffect(() => {
-        document.title = 'All Users';
+        document.title = `${serverData.users.length} Users`;
         //eslint-disable-next-line
     }, [])
     if (serverData) {

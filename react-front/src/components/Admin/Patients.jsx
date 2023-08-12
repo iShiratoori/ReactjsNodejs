@@ -174,13 +174,10 @@ const Patients = () => {
     const { data, handleSearch } = useContext(SearchContext)
     const { isOpen, model } = useContext(ModelContext);
     useEffect(() => {
-        console.log(data)
-        document.title = 'All Patients';
+        document.title = `${data.patients.originalData.length} Patients`;
         handleSearch('', 'patients')
         //eslint-disable-next-line
     }, [])
-
-
     return (
         <>
             {isOpen && <ModelToOpen model={model} />}

@@ -11,7 +11,7 @@ const PatientList = ({ patients }) => {
                         patient={patient}
                         id={patient._id}
                         name={(getFullName(patient.name))}
-                        dob={patient.dob.date}
+                        dob={patient.dob}
                         img={patient.image.url}
                         key={patient._id}
                     />

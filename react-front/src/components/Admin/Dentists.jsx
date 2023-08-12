@@ -126,7 +126,7 @@ const Dentists = () => {
     const { isOpen, model } = useContext(ModelContext);
 
     useEffect(() => {
-        document.title = 'All Dentists';
+        document.title = `${data.dentists.originalData.length} Dentists`;
         handleSearch('', 'dentists')
         //eslint-disable-next-line
     }, [])

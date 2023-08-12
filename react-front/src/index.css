@@ -16,33 +16,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.stepper-wrapper {
-  @apply flex justify-between mt-auto;
-}
-.stepper-item {
-  @apply relative flex items-center flex-1;
-  flex-direction: column;
 
+.stepper-item{
+@apply relative flex items-center flex-1 flex-col;
 }
-
-.stepper-item::before {
-  position: absolute;
-  content: "";
-  border-bottom: 2px solid #ccc;
-  width: 100%;
-  top: 20px;
-  left: -50%;
-  z-index: 2;
-}
-
 .stepper-item::after {
-  position: absolute;
-  content: "";
-  border-bottom: 2px solid #ccc;
-  width: 100%;
-  top: 20px;
-  left: 50%;
-  z-index: 2;
+  @apply absolute content-[''] border-b-2 border-gray-300 w-full top-[20px] left-[50%] ;
 }
 
 .stepper-item .step-counter {

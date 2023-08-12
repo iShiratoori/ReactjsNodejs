@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import useWizardFormHook from '../hooks/useWizardFrom';
+import useWizardFormHook from '../hooks/useWizardForm';
 
 
 const StageOne = () => {

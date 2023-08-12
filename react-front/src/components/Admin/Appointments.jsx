@@ -77,8 +77,7 @@ const Appointments = () => {
     const { serverData } = useServerData()
     const { isOpen, model } = useContext(ModelContext);
     useEffect(() => {
-        console.log(serverData)
-        document.title = 'All Appointments';
+        document.title = `${serverData.appointments.length} Appointments`
         //eslint-disable-next-line
     }, [])
     if (serverData) {

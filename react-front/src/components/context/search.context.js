@@ -13,7 +13,7 @@ export const SearchProvider = ({ children, serverData }) => {
         appointments: '',
         payments: ''
     });
-    const { setIsLoadingState } = useContext(LoadingDispatchContext);
+    const { setIsLoadingState, dispatchLoading } = useContext(LoadingDispatchContext);
 
     useEffect(() => {
         if (serverData) {
@@ -26,7 +26,7 @@ export const SearchProvider = ({ children, serverData }) => {
                 // payments: { originalData: serverData.payments }
             })
         }
-        setIsLoadingState({ isLoading: false, type: '', text: '' })
+        dispatchLoading()
         //eslint-disable-next-line
     }, [serverData])
 
