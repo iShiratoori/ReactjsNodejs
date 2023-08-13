@@ -26,6 +26,12 @@ export const ModelContextProvider = ({ children }) => {
         setIsOpen(false);
     };
 
+    const delayModelClose = (time) => {
+        setTimeout(() => {
+            closeModel()
+        }, time || 5000);
+    };
+
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (modelRef.current && !modelRef.current.contains(event.target)) {
@@ -40,7 +46,7 @@ export const ModelContextProvider = ({ children }) => {
     }, []);
     return (
         <ModelContext.Provider value={{ isOpen, data, model }}>
-            <DispatchModelContext.Provider value={{ openModel, closeModel, modelRef, setModel }}>
+            <DispatchModelContext.Provider value={{ openModel, closeModel, modelRef, setModel, delayModelClose }}>
                 {children}
             </DispatchModelContext.Provider>
         </ModelContext.Provider>

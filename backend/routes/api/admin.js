@@ -44,7 +44,7 @@ router.route('/')
 //patients
 router.route('/patients')
     // .get(all patients)
-    .post(validatePatient, admin.patient.register)
+    .post(validatePatient, admin.patient.register, admin.patient.all)
     .put(validatePatient, admin.patient.update)
     .delete(admin.patient.deleteP, admin.patient.all)
 

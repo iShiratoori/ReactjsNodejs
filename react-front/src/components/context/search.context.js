@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { getFullName } from '../helpers';
 import { useEffect } from 'react';
-import { LoadingDispatchContext } from './loading.context';
 
 export const SearchContext = createContext();
 
@@ -13,11 +12,9 @@ export const SearchProvider = ({ children, serverData }) => {
         appointments: '',
         payments: ''
     });
-    const { setIsLoadingState, dispatchLoading } = useContext(LoadingDispatchContext);
 
     useEffect(() => {
         if (serverData) {
-            setIsLoadingState({ isLoading: true, type: 'server', text: 'please wait filtering data' })
             setSearchQueries({
                 patients: { searchResult: serverData.patients, originalData: serverData.patients },
                 dentists: { searchResult: serverData.dentists, originalData: serverData.dentists },
@@ -26,7 +23,6 @@ export const SearchProvider = ({ children, serverData }) => {
                 // payments: { originalData: serverData.payments }
             })
         }
-        dispatchLoading()
         //eslint-disable-next-line
     }, [serverData])
 

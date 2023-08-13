@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useWizardContext } from '../../context/wizard.context';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { LoadingContext, LoadingDispatchContext } from '../../context/loading.context';
 import Loading from '../Loading';
 const Wizard = ({ submitToServer }) => {

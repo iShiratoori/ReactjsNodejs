@@ -1,11 +1,10 @@
-import { memo, useContext, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import Wizard from './Wizard/Wizard';
 import useInput from '../hooks/useInput';
 import { patientSchema } from '../utils/Schema';
 import { WizardProvider, useWizardContext } from '../context/wizard.context';
 import { performAPIRequest } from '../../server/server';
-import { LoadingContext } from '../context/loading.context';
-import Loading from './Loading';
+import { useServerDispatch } from '../context/data.context';
 const Joi = require('joi');
 const IntitialFormData = {
     patient: {
@@ -322,14 +321,18 @@ const StageThree = () => {
 
 const Finish = () => {
     const { wizard, setWizard } = useWizardContext()
+    const { setServerData } = useServerDispatch();
+
     useEffect(() => {
         setWizard({ type: 'SET_CURRENT_STEP_AS_COMPLETED', payload: { validated: true } });
+        setServerData({ type: 'PATIENTS', data: wizard.currentDiv.formData.data.patients })
+        //eslint-disable-next-line
     }, [])
-    return (<>
+    return (
         <div className="md:col-span-5 mt-20 text-center">
-            {wizard.currentDiv.formData.data.message}
+            <p> New pateint successfully registered  </p>
         </div>
-    </>)
+    )
 }
 
 const NewPatient = () => {
@@ -381,6 +384,7 @@ const NewPatient = () => {
         }],
         currentStep: 0,
         currentDiv: '',
+        isSubmitted: false,
     }
     useEffect(() => {
         document.title = 'New Patient Form';

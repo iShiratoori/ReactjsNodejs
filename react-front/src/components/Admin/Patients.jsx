@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import { DispatchModelContext, ModelContext } from "../context/model.dialog.contex"
 import Model from '../utils/Model'
 import PateintForm from '../utils/PateintForm'
@@ -8,6 +8,8 @@ import { performAPIRequest } from "../../server/server"
 import PatientList from "../utils/PatientList"
 import { SearchContext } from "../context/search.context"
 import { useServerDispatch } from "../context/data.context"
+import { LoadingContext, LoadingDispatchContext } from "../context/loading.context"
+import Loading from "../utils/Loading"
 
 const EditPatient = ({ data }) => {
     const submitToServer = async (patient) => {
@@ -106,22 +108,30 @@ const LinkToUser = () => {
 const DeletePatient = () => {
     const { setServerData } = useServerDispatch();
     const { data } = useContext(ModelContext)
-    const { closeModel } = useContext(DispatchModelContext)
+    const [isDeleted, setIsDeleted] = useState(false)
+    const { delayModelClose } = useContext(DispatchModelContext)
+    const { setIsLoadingState, dispatchLoading } = useContext(LoadingDispatchContext)
+
     const handleDeletion = async (e) => {
         e.preventDefault();
+        setIsLoadingState({ isLoading: true, text: '', type: '' })
         try {
             const res = await performAPIRequest('api/admin/patients', 'Delete', {
                 patientId: data._id
             })
+            dispatchLoading()
             setServerData({ type: 'PATIENTS', data: res.patients })
-            closeModel()
+            setIsDeleted(true)
+            delayModelClose()
         } catch (error) {
+            setIsDeleted(false)
+            dispatchLoading()
             console.log(error)
         }
     }
     return (
         <Model open={true}>
-            <DeleteFormModel>
+            <DeleteFormModel isDeleted={isDeleted}>
                 <div className="p-6 pt-0 text-center">
                     <svg className="w-16 h-16 mx-auto text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>

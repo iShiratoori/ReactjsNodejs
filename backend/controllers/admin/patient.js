@@ -59,7 +59,7 @@ const register = catchAsync(async (req, res, next) => {
     if (temporaryPath) {
         await cloudinary.deleteFile(temporaryPath)
     }
-    res.status(200).json({ message: 'New pateint successfully registered' })
+    next()
 });
 
 // //update patient info
