@@ -29,7 +29,7 @@ export const ServerDataProvider = ({ children, role }) => {
         <ServerDataContext.Provider value={{ serverData }}>
             <ServerDataDispatchContext.Provider value={{ setServerData }}>
                 <SearchProvider serverData={serverData}>
-                    {isLoadingState.isLoading ?
+                    {isLoadingState.isLoading && isLoadingState.type === 'server' ?
                         <Loading
                             size={'sm'}
                             text={isLoadingState.text}

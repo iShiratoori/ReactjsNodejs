@@ -45,10 +45,12 @@ const Wizard = ({ submitToServer }) => {
                     </div><div className='grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3'>
                         {/* {errors && <p className="mt-2 text-sm text-red-600 dark:text-red-500 font-medium">{errors.patient}</p>} */}
                         {isLoadingState.isLoading ?
-                            <Loading
-                                size={'sm'}
-                                text={isLoadingState.text}
-                                type={isLoadingState.type} />
+                            <div className="md:col-span-5 mt-20 text-center">
+                                <Loading
+                                    size={'sm'}
+                                    text={isLoadingState.text}
+                                    type={isLoadingState.type} />
+                            </div>
                             : wizard.currentDiv.step}
                     </div>
 

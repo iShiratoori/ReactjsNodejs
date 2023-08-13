@@ -17,7 +17,7 @@ export const SearchProvider = ({ children, serverData }) => {
 
     useEffect(() => {
         if (serverData) {
-            setIsLoadingState({ isLoading: true, type: 'filtering data', text: 'please wait' })
+            setIsLoadingState({ isLoading: true, type: 'server', text: 'please wait filtering data' })
             setSearchQueries({
                 patients: { searchResult: serverData.patients, originalData: serverData.patients },
                 dentists: { searchResult: serverData.dentists, originalData: serverData.dentists },
