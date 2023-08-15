@@ -7,7 +7,7 @@ const PatientForm = ({ patient, submitToServer }) => {
     const [name, handleNameChange] = useInput(patient.name);
     const [address, handleAddressChange] = useInput(patient.address[0]);
     const [image, setImage] = useState(null);
-    const [dob, handleDOBChange] = useInput(getDateFormattedForEditing(patient.dob));
+    const [dob, handleDOBChange] = useState(getDateFormattedForEditing(patient.dob));
     const [contacts, handleContactsChange] = useInput(patient.contacts);
     const [gender, handleGenderChange] = useState(patient.gender);
 
@@ -22,7 +22,7 @@ const PatientForm = ({ patient, submitToServer }) => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault()
-        submitToServer({ _id: patient._id, name, address, image, gender, contacts })
+        submitToServer({ _id: patient._id, name, address, dob, image, gender, contacts })
     }
     return (
         <form onSubmit={handleSubmit}>
@@ -92,7 +92,7 @@ const PatientForm = ({ patient, submitToServer }) => {
                             name="dob"
                             id="dob"
                             value={dob}
-                            onChange={handleDOBChange}
+                            onChange={(e) => handleDOBChange(e.target.value)}
                             className="block py-2.5 px-0 w-full font-semibold text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                             placeholder=" "
                             required />
